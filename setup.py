@@ -21,7 +21,7 @@ name="Xray",
 version="0.0.1",
 author="Abhijeet Pimpale",
 author_email="apimpale06@gmail.com",
-install_requires=get_requirements(r"/config/workspace/requirements_dev.txt"),
+install_requires=get_requirements(r"C:\\Users\\admin\\deep_project\\DLProject\\requirements_dev.txt"),
 package=find_packages()
 
 )
