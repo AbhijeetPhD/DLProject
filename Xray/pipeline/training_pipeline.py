@@ -1,7 +1,8 @@
 from Xray.component.data_ingestion import DataIngestion
 from Xray.component.data_transformation import DataTransformation
-from Xray.entity.artifacts_entity import DataIngestionArtifact,DataTransformationArtifact
-from Xray.entity.config_entity import DataIngestionConfig,DataTransformationConfig
+from Xray.component.model_training import ModelTrainer
+from Xray.entity.artifacts_entity import DataIngestionArtifact,DataTransformationArtifact,ModelTrainerArtifact
+from Xray.entity.config_entity import DataIngestionConfig,DataTransformationConfig,ModelTrainerConfig
 from Xray.exception import XRayException
 from Xray.logger import logging
 import sys
@@ -10,6 +11,7 @@ class TrainPipeline:
     def __init__(self):
         self.data_ingestion_config = DataIngestionConfig()
         self.data_transformation_config=DataTransformationConfig()
+        self.model_trainer_config=ModelTrainerConfig()
         #print(self.data_ingestion_config)
         
         
@@ -53,6 +55,26 @@ class TrainPipeline:
 
         except Exception as e:
             raise XRayException(e,sys)
+        
+    def start_model_trainer(
+        self, data_transformation_artifact: DataTransformationArtifact
+    ) -> ModelTrainerArtifact:
+        logging.info("Entered the start_model_trainer method of TrainPipeline class")
+
+        try:
+            model_trainer = ModelTrainer(
+                data_transformation_artifact=data_transformation_artifact,
+                model_trainer_config=self.model_trainer_config,
+            )
+
+            model_trainer_artifact = model_trainer.initiate_model_trainer()
+
+            logging.info("Exited the start_model_trainer method of TrainPipeline class")
+
+            return model_trainer_artifact
+
+        except Exception as e:
+            raise XRayException(e, sys)
            
 if __name__ == "__main__":
     train_pipeline=TrainPipeline()
@@ -60,4 +82,5 @@ if __name__ == "__main__":
     data_transformation_artifacts=(
         train_pipeline.start_data_transformation(data_ingestion_artifacts)
         )
+    model_trainer_artifacts=train_pipeline.start_model_trainer(data_transformation_artifacts)
     

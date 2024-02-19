@@ -10,6 +10,7 @@ from torchvision.datasets import ImageFolder
 from Xray.entity.artifacts_entity import (
     DataIngestionArtifact,
     DataTransformationArtifact,
+    
 )
 from Xray.entity.config_entity import DataTransformationConfig
 from Xray.exception import XRayException
